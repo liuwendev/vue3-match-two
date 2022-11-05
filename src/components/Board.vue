@@ -1,7 +1,6 @@
 <template>
   <div class="win" v-if="gameStatus === 1">Congratulations! You won!</div>
-  <div v-else>
-    <h2>Level {{ level }}</h2>
+  <h2>Level {{ level }}</h2>
     <div
       class="board"
       :style="{ width: 100 * size + 'px', height: 100 * size + 'px' }"
@@ -10,7 +9,7 @@
         v-for="(cell, index) in cells"
         :key="index"
         :icon-id="cell"
-        @pmousedown="mouseDown(index)"
+        @mousedown="mouseDown(index)"
         @mousemove="mouseMove(index)"
         @mouseup="mouseUp(index)"
         @touchstart="mouseDown(index)"
@@ -20,7 +19,6 @@
         :closed="isClosed(index)"
       />
     </div>
-  </div>
   <div @click="reload()" class="reload">Reload</div>
 </template>
 
