@@ -12,9 +12,9 @@
       :icon-id="cell"
       :selected="checkCell(index)"
       :closed="isClosed(index)"
-      v-touch:press="mouseDown(index)"
-      v-touch:drag="mouseMove(index)"
-      v-touch:release="mouseUp(index)"
+      v-touch:drag="touchDown(index)"
+      v-touch:rollover="touchMove(index)"
+      v-touch:release="touchUp(index)"
     />
   </div>
   <div @click="reload()" class="reload">Reload</div>
@@ -24,6 +24,11 @@
 import { onMounted, ref } from "vue";
 import BoardItem from "@/components/BoardItem";
 
+/*
+@mousedown="mouseDown(index)"
+      @mousemove="mouseMove(index)"
+      @mouseup="mouseUp(index)"
+      */
 let cells = ref([3, 1, 0, 1, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 3]);
 const path = ref([]);
 const size = ref(4);
@@ -79,38 +84,24 @@ const moveToNextLevel = () => {
   start(level.value);
 };
 
-const mouseDown = (index) => {
+const touchDown = (index) => {
   return function (event) {
     event.preventDefault();
+    
     path.value = [];
-
     if (cells.value[index] && !isClosed(index)) {
       path.value.push(index);
     }
   };
 };
 
-const mouseUp = (index) => {
+const touchMove = (index) => {
   return function (event) {
     event.preventDefault();
-    if (
-      index !== path.value[0] &&
-      cells.value[index] === cells.value[path.value[0]]
-    ) {
-      closedPath.value = closedPath.value.concat(path.value);
-    }
 
-    path.value = [];
-
-    checkLevel();
-  };
-};
-
-const mouseMove = (index) => {
-  return function (event) {
-    event.preventDefault();
     if (path.value.length) {
       const lastIndex = path.value[path.value.length - 1];
+      console.log(lastIndex);
 
       if (
         (Math.abs(lastIndex - index) === 1 ||
@@ -129,6 +120,64 @@ const mouseMove = (index) => {
       }
     }
   };
+};
+
+const touchUp = (index) => {
+  return function (event) {
+    event.preventDefault();
+
+    if (
+      index !== path.value[0] &&
+      cells.value[index] === cells.value[path.value[0]]
+    ) {
+      closedPath.value = closedPath.value.concat(path.value);
+    }
+
+    path.value = [];
+
+    checkLevel();
+  };
+};
+
+const mouseDown = (index) => {
+  path.value = [];
+  if (cells.value[index] && !isClosed(index)) {
+    path.value.push(index);
+  }
+};
+
+const mouseMove = (index) => {
+  if (path.value.length) {
+    const lastIndex = path.value[path.value.length - 1];
+
+    if (
+      (Math.abs(lastIndex - index) === 1 ||
+        Math.abs(lastIndex - index) === size.value) &&
+      !isClosed(index)
+    ) {
+      path.value.push(index);
+    }
+
+    if (
+      isClosed(index) ||
+      (cells.value[index] && cells.value[index] !== cells.value[path.value[0]])
+    ) {
+      path.value = [];
+    }
+  }
+};
+
+const mouseUp = (index) => {
+  if (
+    index !== path.value[0] &&
+    cells.value[index] === cells.value[path.value[0]]
+  ) {
+    closedPath.value = closedPath.value.concat(path.value);
+  }
+
+  path.value = [];
+
+  checkLevel();
 };
 
 const checkCell = (index) => {
