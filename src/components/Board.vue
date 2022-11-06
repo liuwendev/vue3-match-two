@@ -10,10 +10,11 @@
       v-for="(cell, index) in cells"
       :key="index"
       :icon-id="cell"
+      :id="index"
       :selected="checkCell(index)"
       :closed="isClosed(index)"
-      v-touch:drag="touchDown(index)"
-      v-touch:rollover="touchMove(index)"
+      v-touch:press="touchDown(index)"
+      v-touch:drag="touchMove()"
       v-touch:release="touchUp(index)"
     />
   </div>
@@ -24,18 +25,13 @@
 import { onMounted, ref } from "vue";
 import BoardItem from "@/components/BoardItem";
 
-/*
-@mousedown="mouseDown(index)"
-      @mousemove="mouseMove(index)"
-      @mouseup="mouseUp(index)"
-      */
 let cells = ref([3, 1, 0, 1, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 3]);
 const path = ref([]);
 const size = ref(4);
 const closedPath = ref([]);
 let level = ref(1);
 const maxLevel = 2;
-let gameStatus = ref(0); // 0 - play, 1 = win
+let gameStatus = ref(0);
 
 const start = (level) => {
   if (level === 1) {
@@ -85,36 +81,36 @@ const moveToNextLevel = () => {
 };
 
 const touchDown = (index) => {
-  return function (event) {
-    event.preventDefault();
-    
+  return function () {
     path.value = [];
+
     if (cells.value[index] && !isClosed(index)) {
       path.value.push(index);
     }
   };
 };
 
-const touchMove = (index) => {
+const touchMove = () => {
   return function (event) {
-    event.preventDefault();
+    let touched = event.touches[0];
+    let cell = document.elementFromPoint(touched.clientX, touched.clientY);
+    let cellId = Number(cell.id);
 
     if (path.value.length) {
       const lastIndex = path.value[path.value.length - 1];
-      console.log(lastIndex);
 
       if (
-        (Math.abs(lastIndex - index) === 1 ||
-          Math.abs(lastIndex - index) === size.value) &&
-        !isClosed(index)
+        (Math.abs(lastIndex - cellId) === 1 ||
+          Math.abs(lastIndex - cellId) === size.value) &&
+        !isClosed(cellId)
       ) {
-        path.value.push(index);
+        path.value.push(cellId);
       }
 
       if (
-        isClosed(index) ||
-        (cells.value[index] &&
-          cells.value[index] !== cells.value[path.value[0]])
+        isClosed(cellId) ||
+        (cells.value[cellId] &&
+          cells.value[cellId] !== cells.value[path.value[0]])
       ) {
         path.value = [];
       }
@@ -123,12 +119,12 @@ const touchMove = (index) => {
 };
 
 const touchUp = (index) => {
-  return function (event) {
-    event.preventDefault();
+  return function () {
+    let cellIndex = cells.value[path.value[path.value.length - 1]];
 
     if (
-      index !== path.value[0] &&
-      cells.value[index] === cells.value[path.value[0]]
+      path.value[path.value.length - 1] !== path.value[0] &&
+      cells.value[index] === cellIndex
     ) {
       closedPath.value = closedPath.value.concat(path.value);
     }
@@ -147,9 +143,10 @@ const mouseDown = (index) => {
 };
 
 const mouseMove = (index) => {
+  console.log('MOVE:', path.value);
+
   if (path.value.length) {
     const lastIndex = path.value[path.value.length - 1];
-
     if (
       (Math.abs(lastIndex - index) === 1 ||
         Math.abs(lastIndex - index) === size.value) &&
@@ -191,6 +188,7 @@ const isClosed = (index) => {
 onMounted(() => {
   start(level.value);
 });
+
 </script>
 
 <style>

@@ -4,7 +4,8 @@
         + ( props.selected ? 'selected' : '' ) 
         + ( props.closed ? 'closed' : '' )
     ">
-        <i v-if="iconId" :class="'icon icon-' + iconId"></i>
+    {{ iconId }}
+        <!-- <i v-if="iconId" :class="'icon icon-' + iconId"></i> -->
     </div>
 </template>
 
@@ -39,6 +40,10 @@ const props = defineProps({
     width: 96px;
     height: 96px;
     cursor: pointer;
+}
+
+.board-item i {
+    touch-action: none;
 }
 
 .selected {

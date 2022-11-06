@@ -25,5 +25,6 @@ body {
   -khtml-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
+  -webkit-touch-callout: none;
 }
 </style>
