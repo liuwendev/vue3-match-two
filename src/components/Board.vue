@@ -1,24 +1,21 @@
 <template>
   <div class="win" v-if="gameStatus === 1">Congratulations! You won!</div>
   <h2>Level {{ level }}</h2>
-    <div
-      class="board"
-      :style="{ width: 100 * size + 'px', height: 100 * size + 'px' }"
-    >
-      <BoardItem
-        v-for="(cell, index) in cells"
-        :key="index"
-        :icon-id="cell"
-        @mousedown="mouseDown(index)"
-        @mousemove="mouseMove(index)"
-        @mouseup="mouseUp(index)"
-        @touchstart="mouseDown(index)"
-        @touchmove="mouseMove(index)"
-        @touchend="mouseUp(index)"
-        :selected="checkCell(index)"
-        :closed="isClosed(index)"
-      />
-    </div>
+  <div
+    class="board"
+    :style="{ width: 100 * size + 'px', height: 100 * size + 'px' }"
+  >
+    <BoardItem
+      v-for="(cell, index) in cells"
+      :key="index"
+      :icon-id="cell"
+      :selected="checkCell(index)"
+      :closed="isClosed(index)"
+      v-touch:press="mouseDown(index)"
+      v-touch:drag="mouseMove(index)"
+      v-touch:release="mouseUp(index)"
+    />
+  </div>
   <div @click="reload()" class="reload">Reload</div>
 </template>
 

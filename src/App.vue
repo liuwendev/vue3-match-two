@@ -15,8 +15,11 @@ body {
 }
 
 #app {
-  text-align: center;
-  margin-top: 60px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
   user-select: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
