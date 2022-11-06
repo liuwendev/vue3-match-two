@@ -2,6 +2,7 @@
   <div class="win" v-if="gameStatus === 1">Congratulations! You won!</div>
   <h2>Level {{ level }}</h2>
   <div
+    v-if="cells"
     class="board"
     :style="{ width: 100 * size + 'px', height: 100 * size + 'px' }"
   >
@@ -79,45 +80,52 @@ const moveToNextLevel = () => {
 };
 
 const mouseDown = (index) => {
-  path.value = [];
+  return function () {
+    path.value = [];
 
-  if (cells.value[index] && !isClosed(index)) {
-    path.value.push(index);
-  }
+    if (cells.value[index] && !isClosed(index)) {
+      path.value.push(index);
+    }
+  };
 };
 
 const mouseUp = (index) => {
-  if (
-    index !== path.value[0] &&
-    cells.value[index] === cells.value[path.value[0]]
-  ) {
-    closedPath.value = closedPath.value.concat(path.value);
-  }
+  return function () {
+    if (
+      index !== path.value[0] &&
+      cells.value[index] === cells.value[path.value[0]]
+    ) {
+      closedPath.value = closedPath.value.concat(path.value);
+    }
 
-  path.value = [];
+    path.value = [];
 
-  checkLevel();
+    checkLevel();
+  };
 };
 
 const mouseMove = (index) => {
-  if (path.value.length) {
-    const lastIndex = path.value[path.value.length - 1];
+  return function () {
+    if (path.value.length) {
+      const lastIndex = path.value[path.value.length - 1];
 
-    if (
-      (Math.abs(lastIndex - index) === 1 ||
-        Math.abs(lastIndex - index) === size.value) &&
-      !isClosed(index)
-    ) {
-      path.value.push(index);
-    }
+      if (
+        (Math.abs(lastIndex - index) === 1 ||
+          Math.abs(lastIndex - index) === size.value) &&
+        !isClosed(index)
+      ) {
+        path.value.push(index);
+      }
 
-    if (
-      isClosed(index) ||
-      (cells.value[index] && cells.value[index] !== cells.value[path.value[0]])
-    ) {
-      path.value = [];
+      if (
+        isClosed(index) ||
+        (cells.value[index] &&
+          cells.value[index] !== cells.value[path.value[0]])
+      ) {
+        path.value = [];
+      }
     }
-  }
+  };
 };
 
 const checkCell = (index) => {

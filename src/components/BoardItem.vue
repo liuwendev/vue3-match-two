@@ -9,7 +9,9 @@
 </template>
 
 <script setup>
-
+const tes = () => {
+    console.log('test')
+}
 const props = defineProps({
     iconId: {
         type: Number,
