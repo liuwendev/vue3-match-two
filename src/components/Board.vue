@@ -80,7 +80,8 @@ const moveToNextLevel = () => {
 };
 
 const mouseDown = (index) => {
-  return function () {
+  return function (event) {
+    event.preventDefault();
     path.value = [];
 
     if (cells.value[index] && !isClosed(index)) {
@@ -90,7 +91,8 @@ const mouseDown = (index) => {
 };
 
 const mouseUp = (index) => {
-  return function () {
+  return function (event) {
+    event.preventDefault();
     if (
       index !== path.value[0] &&
       cells.value[index] === cells.value[path.value[0]]
@@ -105,7 +107,8 @@ const mouseUp = (index) => {
 };
 
 const mouseMove = (index) => {
-  return function () {
+  return function (event) {
+    event.preventDefault();
     if (path.value.length) {
       const lastIndex = path.value[path.value.length - 1];
 
