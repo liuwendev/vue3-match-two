@@ -4,7 +4,7 @@
   <div
     v-if="cells"
     class="board"
-    :style="{ width: 100 * size + 'px', height: 100 * size + 'px' }"
+    :style="{ width: 50 * size + 'px', height: 50 * size + 'px' }"
   >
     <BoardItem
       v-for="(cell, index) in cells"
@@ -195,8 +195,8 @@ onMounted(() => {
 .board {
   display: flex;
   flex-wrap: wrap;
-  width: 400px;
-  height: 400px;
+  width: 200px;
+  height: 200px;
   margin: 24px auto;
   border: 2px solid #262727;
 }

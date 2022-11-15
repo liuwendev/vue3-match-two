@@ -1,17 +1,14 @@
 <template>
-  <Board />
+  <router-view />
 </template>
-
-<script setup>
-import Board from '@/components/Board';
-
-</script>
 
 <style>
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   color: #cfd3dc;
   background-color: #141414;
+  margin: 0;
+  padding: 0;
 }
 
 #app {
@@ -26,5 +23,8 @@ body {
   -moz-user-select: none;
   -ms-user-select: none;
   -webkit-touch-callout: none;
+  min-height: 100vh;
+  background: url(assets/bg.png) center center no-repeat;
+  background-size: cover;
 }
 </style>

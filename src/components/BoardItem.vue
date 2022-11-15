@@ -3,16 +3,12 @@
         'board-item ' 
         + ( props.selected ? 'selected' : '' ) 
         + ( props.closed ? 'closed' : '' )
+        + ( iconId ? ' icon icon-' + iconId : '')
     ">
-    {{ iconId }}
-        <!-- <i v-if="iconId" :class="'icon icon-' + iconId"></i> -->
     </div>
 </template>
 
 <script setup>
-const tes = () => {
-    console.log('test')
-}
 const props = defineProps({
     iconId: {
         type: Number,
@@ -36,9 +32,9 @@ const props = defineProps({
 <style>
 .board-item {
     position: relative;
-    border: 2px solid #262727;
-    width: 96px;
-    height: 96px;
+    border: 1px solid #262727;
+    width: 48px;
+    height: 48px;
     cursor: pointer;
 }
 
@@ -55,7 +51,6 @@ const props = defineProps({
 }
 
 .icon {
-    position: absolute;
     top: 0;
     left: 0;
     right: 0;
@@ -66,8 +61,8 @@ const props = defineProps({
 .icon-2,
 .icon-3,
 .icon-4 {
-    background: url('../assets/icons.png');
-    background-size: 300px 300px;
+    background-image: url('../assets/icons.png');
+    background-size: 150px 150px;
 }
 
 .icon-1 {
@@ -75,15 +70,15 @@ const props = defineProps({
 }
 
 .icon-2 {
-    background-position: 100px 0;
+    background-position: 50px 0;
 }
 
 .icon-3 {
-    background-position: 200px 0;
+    background-position: 100px 0;
 }
 
 .icon-4 {
-    background-position: 100px 200px;
+    background-position: 150px 100px;
 }
 
 </style>
